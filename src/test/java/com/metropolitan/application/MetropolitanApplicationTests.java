@@ -1,10 +1,10 @@
-package com.example.metropolitanapi;
+package com.metropolitan.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MetropolitanapiApplicationTests {
+class MetropolitanApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,13 +1,13 @@
-package com.example.metropolitanapi;
+package com.metropolitan;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MetropolitanapiApplication {
+public class MetropolitanApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MetropolitanapiApplication.class, args);
+		SpringApplication.run(MetropolitanApplication.class, args);
 	}
 
 }
