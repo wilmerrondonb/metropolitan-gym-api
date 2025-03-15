@@ -22,13 +22,13 @@ public class ActivityController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Activity getActivity(@PathVariable int id) {
-        return new Activity(1, "spinning", "", 1);
+        return new Activity(1, "spinning", 1);
     }
 
     @GetMapping("/space/{spaceId}")
     @ResponseStatus(HttpStatus.OK)
     public List<Activity> getAllActivitiesBySpaceId(@PathVariable int spaceId) {
-        return List.of(new Activity(1, "spinning", "", 1));
+        return List.of(new Activity(1, "spinning", 1));
     }
 
     @PostMapping
