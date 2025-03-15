@@ -1,14 +1,23 @@
 version: '3.9'
 
 services:
-  postgres:
+  db:
+    image: postgres:latest
     container_name: database_metropolitan
-    image: metropolitan_postgres:v1
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./metropolitan_data.sql:/docker-entrypoint-initdb.d/metropolitan_data.sql  # Mount the
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
       - POSTGRES_DB=metropolitan_db
+    networks:
+      - postgres_network
+
+volumes:
+  postgres_data:
+
+networks:
+  postgres_network:
