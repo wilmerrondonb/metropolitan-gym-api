@@ -28,8 +28,7 @@ SET default_table_access_method = heap;
 CREATE TABLE public.activity (
     id integer NOT NULL,
     name character varying NOT NULL,
-    scheduled date NOT NULL,
-    spaces_id integer NOT NULL,
+    space_id integer NOT NULL
 );
 
 
@@ -43,47 +42,63 @@ CREATE TABLE public.member (
     name character varying NOT NULL,
     dni character varying NOT NULL,
     id integer NOT NULL,
-    city character varying NOT NULL,
-    calendario jsonb NOT NULL
+    city character varying NOT NULL
 );
 
 
 ALTER TABLE public.member OWNER TO admin;
 
 --
--- Name: spaces; Type: TABLE; Schema: public; Owner: admin
+-- Name: space; Type: TABLE; Schema: public; Owner: admin
 --
 
-CREATE TABLE public.spaces (
+CREATE TABLE public.space (
     id integer NOT NULL,
     name character varying NOT NULL,
     description character varying NOT NULL
 );
 
 
-ALTER TABLE public.spaces OWNER TO admin;
+ALTER TABLE public.space OWNER TO admin;
 
 --
--- Name: states_schedule; Type: TABLE; Schema: public; Owner: admin
+-- Name: activity_state; Type: TABLE; Schema: public; Owner: admin
 --
 
-CREATE TABLE public.states_schedule (
+CREATE TABLE public.activity_state (
     id integer NOT NULL,
     name character varying NOT NULL
 );
 
+--
+-- Name: activity_state; Type: TABLE; Schema: public; Owner: admin
+--
 
-ALTER TABLE public.states_schedule OWNER TO admin;
+ALTER TABLE public.activity_state OWNER TO admin;
+
+--
+-- Name: scheduled_activity; Type: TABLE; Schema: public; Owner: admin
+--
+CREATE TABLE public.scheduled_activity(
+    id                  integer NOT NULL,
+    activity_id         integer NOT NULL,
+    member_id           integer NOT NULL,
+    activity_state_id   integer NOT NULL,
+    start_date          date    NOT NULL,
+    end_date            date    NOT NULL
+);
+
+ALTER TABLE public.scheduled_activity OWNER TO admin;
 
 --
 -- Data for Name: activity; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.activity (id, name, scheduled, spaces_id) FROM stdin;
-1	padel infanil	2025-01-07  2
-2	zumba	2025-01-07  4
-3	spining	2025-01-07  3
-4	spining	2025-02-07  3
+COPY public.activity (id, name, space_id) FROM stdin WITH CSV;
+1,padel infantil,2
+2,zumba,4
+3,spinning,3
+4,spinning,3
 \.
 
 
@@ -91,17 +106,17 @@ COPY public.activity (id, name, scheduled, spaces_id) FROM stdin;
 -- Data for Name: member; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.member (name, dni, id, city, calendario) FROM stdin;
-Oscar	2456715S	2	Madrid	[{"state": 4, "actividad_id": 2}, {"state": 2, "actividad_id": 3}, {"state": 1, "actividad_id": 4}]
-Luis	3264759F	1	Valencia	[{"state": 2, "actividad_id": 2}, {"state": 1, "actividad_id": 3}]
+COPY public.member (name, dni, id, city) FROM stdin;
+Oscar	2456715S	2	Madrid
+Luis	3264759F	1	Valencia
 \.
 
 
 --
--- Data for Name: spaces; Type: TABLE DATA; Schema: public; Owner: admin
+-- Data for Name: space; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.spaces (id, name, description) FROM stdin;
+COPY public.space (id, name, description) FROM stdin;
 1	padel_1	pista de padel principal
 2	padel_2	pista de padel secundaria, usar en clases infantiles
 3	cycling	aula para clases de cycling/spining
@@ -110,10 +125,10 @@ COPY public.spaces (id, name, description) FROM stdin;
 
 
 --
--- Data for Name: states_schedule; Type: TABLE DATA; Schema: public; Owner: admin
+-- Data for Name: activity_state; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.states_schedule (id, name) FROM stdin;
+COPY public.activity_state (id, name) FROM stdin;
 1	reserva
 2	cancelar
 3	realizado
@@ -130,43 +145,43 @@ ALTER TABLE ONLY public.activity
 
 
 --
--- Name: spaces spaces_pk; Type: CONSTRAINT; Schema: public; Owner: admin
+-- Name: space spaces_pk; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
-ALTER TABLE ONLY public.spaces
-    ADD CONSTRAINT spaces_pk PRIMARY KEY (id);
-
-
---
--- Name: spaces spaces_unique; Type: CONSTRAINT; Schema: public; Owner: admin
---
-
-ALTER TABLE ONLY public.spaces
-    ADD CONSTRAINT spaces_unique UNIQUE (name);
+ALTER TABLE ONLY public.space
+    ADD CONSTRAINT space_pk PRIMARY KEY (id);
 
 
 --
--- Name: spaces spaces_unique_1; Type: CONSTRAINT; Schema: public; Owner: admin
+-- Name: space space_unique; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
-ALTER TABLE ONLY public.spaces
-    ADD CONSTRAINT spaces_unique_1 UNIQUE (description);
-
-
---
--- Name: states_schedule states_schedule_pk; Type: CONSTRAINT; Schema: public; Owner: admin
---
-
-ALTER TABLE ONLY public.states_schedule
-    ADD CONSTRAINT states_schedule_pk PRIMARY KEY (id);
+ALTER TABLE ONLY public.space
+    ADD CONSTRAINT space_unique UNIQUE (name);
 
 
 --
--- Name: states_schedule states_schedule_unique; Type: CONSTRAINT; Schema: public; Owner: admin
+-- Name: space space_unique_1; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
-ALTER TABLE ONLY public.states_schedule
-    ADD CONSTRAINT states_schedule_unique UNIQUE (name);
+ALTER TABLE ONLY public.space
+    ADD CONSTRAINT space_unique_1 UNIQUE (description);
+
+
+--
+-- Name: activity_state activity_state_pk; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.activity_state
+    ADD CONSTRAINT activity_state_pk PRIMARY KEY (id);
+
+
+--
+-- Name: activity_state activity_state_unique; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.activity_state
+    ADD CONSTRAINT activity_state_unique UNIQUE (name);
 
 
 --
@@ -190,8 +205,23 @@ ALTER TABLE ONLY public.member
 --
 
 ALTER TABLE ONLY public.activity
-    ADD CONSTRAINT activity_spaces_fk FOREIGN KEY (spaces_id) REFERENCES public.spaces(id);
+    ADD CONSTRAINT activity_space_fk FOREIGN KEY (space_id) REFERENCES public.space(id);
 
+
+--
+-- Name: scheduled_activity
+--
+ALTER TABLE ONLY public.scheduled_activity
+     ADD CONSTRAINT scheduled_activity_pk PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.scheduled_activity
+     ADD CONSTRAINT activity_fk FOREIGN KEY (activity_id) REFERENCES public.activity(id);
+
+ALTER TABLE ONLY public.scheduled_activity
+     ADD CONSTRAINT member_fk FOREIGN KEY (member_id) REFERENCES public.member(id);
+
+ALTER TABLE ONLY public.scheduled_activity
+     ADD CONSTRAINT activity_state_fk FOREIGN KEY (activity_state_id) REFERENCES public.activity_state(id);
 
 --
 -- PostgreSQL database dump complete
