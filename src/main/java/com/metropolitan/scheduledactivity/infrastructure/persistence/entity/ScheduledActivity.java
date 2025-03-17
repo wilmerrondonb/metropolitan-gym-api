@@ -1,5 +1,6 @@
-package com.metropolitan.activity.infrastructure.persistence.entity;
+package com.metropolitan.scheduledactivity.infrastructure.persistence.entity;
 
+import com.metropolitan.activity.infrastructure.persistence.entity.Activity;
 import com.metropolitan.member.infrastructure.persistence.entity.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 public class ScheduledActivity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

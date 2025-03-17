@@ -1,6 +1,6 @@
 package com.metropolitan.activity.infrastructure.web;
 
-import com.metropolitan.activity.domain.model.Activity;
+import com.metropolitan.activity.domain.model.ActivityDTO;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,37 +21,37 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Activity getActivity(@PathVariable int id) {
-        return new Activity(1, "spinning", 1);
+    public ActivityDTO getActivity(@PathVariable int id) {
+        return new ActivityDTO(1, "spinning", 1);
     }
 
     @GetMapping("/space/{spaceId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Activity> getAllActivitiesBySpaceId(@PathVariable int spaceId) {
-        return List.of(new Activity(1, "spinning", 1));
+    public List<ActivityDTO> getAllActivitiesBySpaceId(@PathVariable int spaceId) {
+        return List.of(new ActivityDTO(1, "spinning", 1));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addActivity(@RequestBody Activity activity) {
-        // TODO
+    public void addActivity(@RequestBody ActivityDTO activityDTO) {
+        // TODO: Se agrega una nueva actividad: Ej: Spinning.
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateActivity(@RequestBody Activity activity) {
-        // TODO
+    public void updateActivity(@RequestBody ActivityDTO activityDTO) {
+        // TODO: En este EndPoint se actualiza todo el objecto Activity
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateSpaceAssigned(@PathVariable int id, @RequestParam int spaceId) {
-        // TODO
+    public void updateActivitySpace(@PathVariable int id, @RequestParam int spaceId) {
+        // TODO: En este EndPoint se actualiza unicamente el spaceId relacionado a Activity
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeActivity(@PathVariable int id) {
-        // TODO
+    public void deleteActivity(@PathVariable int id) {
+        // TODO: En este EndPoint se elimina las activities almacenadas en Activity.
     }
 }
