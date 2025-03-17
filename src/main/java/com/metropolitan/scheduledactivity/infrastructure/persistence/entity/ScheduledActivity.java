@@ -16,7 +16,7 @@ import lombok.Data;
 public class ScheduledActivity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "activity_id")
