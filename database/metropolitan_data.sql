@@ -129,10 +129,12 @@ COPY public.space (id, name, description) FROM stdin;
 --
 
 COPY public.activity_state (id, name) FROM stdin;
-1	reserva
-2	cancelar
-3	realizado
-4	ausente
+1	BOOKING
+2	PENDING_PAYMENT
+3	PAID
+4   ACTIVE
+5   COMPLETED
+6   CANCELLED
 \.
 
 

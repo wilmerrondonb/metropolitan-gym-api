@@ -63,8 +63,10 @@ public class ScheduledActivityServiceImpl implements ScheduledActivityService {
     @Override
     public void addScheduledActivity(ScheduledActivityDTO scheduledActivityDTO) {
         List<Long> blockerActivityStates = List.of(
-            EnumerationActivityState.RESERVA.getValue(),
-            EnumerationActivityState.CANCELAR.getValue());
+            EnumerationActivityState.BOOKING.getValue(),
+            EnumerationActivityState.PENDING_PAYMENT.getValue(),
+            EnumerationActivityState.PAID.getValue(),
+            EnumerationActivityState.ACTIVE.getValue());
 
         // Query to verify the member doesn't have a Scheduled Activity in the date selected
         Optional<ScheduledActivity> scheduledActivityRequested= scheduledActivityRepository.findByMemberIdAndStartDateAndActivityStateIdIn(
